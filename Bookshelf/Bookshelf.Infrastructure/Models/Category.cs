@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Bookshelf.Infrastructure.Models
 {
@@ -12,6 +7,7 @@ namespace Bookshelf.Infrastructure.Models
         public Category()
         {
             Requests = new List<RequestCategory>();
+            Resources = new List<ResourceCategory>();
         }
 
         [Key]
@@ -22,5 +18,7 @@ namespace Bookshelf.Infrastructure.Models
         public string Name { get; set; } = null!;
 
         public ICollection<RequestCategory> Requests { get; set; } = null!;
+
+        public ICollection<ResourceCategory> Resources { get; set; } = null!;
     }
 }

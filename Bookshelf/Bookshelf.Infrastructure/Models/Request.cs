@@ -1,6 +1,6 @@
-﻿using Bookshelf.Infrastructure.Models.Enums;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
+using Bookshelf.Infrastructure.Models.Enums;
 
 namespace Bookshelf.Infrastructure.Models
 {
@@ -10,15 +10,18 @@ namespace Bookshelf.Infrastructure.Models
         {
             Categories = new List<RequestCategory>();
             Followers = new List<RequestFollow>();
+            Upvoters = new List<RequestUpvote>();
         }
 
         [Key]
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Title { get; set; } = null!;
 
         [Required]
+        [MaxLength(100)]
         public string Author { get; set; } = null!;
 
         public DateTime DateAdded { get; set; }
@@ -35,10 +38,13 @@ namespace Bookshelf.Infrastructure.Models
         [Required]
         public string Link { get; set; } = null!;
 
-        public string Motivation { get; set; } = null!;
+        [MaxLength(300)]
+        public string? Motivation { get; set; } = null!;
 
         public ICollection<RequestCategory> Categories { get; set; } = null!;
 
         public ICollection<RequestFollow> Followers { get; set; } = null!;
+
+        public ICollection<RequestUpvote> Upvoters { get; set; } = null!;
     }
 }

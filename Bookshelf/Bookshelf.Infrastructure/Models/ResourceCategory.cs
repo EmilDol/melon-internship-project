@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bookshelf.Infrastructure.Models
 {
-    public class RequestCategory
+    public class ResourceCategory
     {
         [Required]
-        [ForeignKey(nameof(Request))]
-        public int RequestId { get; set; }
+        [ForeignKey(nameof(Resource))]
+        public int ResourceId { get; set; }
 
         [Required]
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
 
-        public Request Request { get; set; } = null!;
+        public Resource Resource { get; set; } = null!;
         public Category Category { get; set; } = null!;
     }
 }

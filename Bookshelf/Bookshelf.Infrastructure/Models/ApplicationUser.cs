@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Bookshelf.Infrastructure.Models
 {
     public class ApplicationUser : IdentityUser
@@ -13,8 +7,11 @@ namespace Bookshelf.Infrastructure.Models
         public ApplicationUser()
         {
             Requests = new List<RequestFollow>();
+            Upvotes = new List<RequestUpvote>();
         }
 
-        public ICollection<RequestFollow> Requests { get; set; } = null!;
+        public ICollection<RequestFollow> Requests { get; set; }
+
+        public ICollection<RequestUpvote> Upvotes { get; set; }
     }
 }

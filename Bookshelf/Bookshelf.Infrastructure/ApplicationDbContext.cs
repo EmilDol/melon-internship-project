@@ -24,6 +24,10 @@ namespace Bookshelf.Infrastructure
 
         public DbSet<RequestFollow> RequestsFollows { get; set; }
 
+        public DbSet<ResourceCategory> ResourcesCategories { get; set; }
+
+        public DbSet<RequestUpvote> RequestUpvotes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -33,6 +37,12 @@ namespace Bookshelf.Infrastructure
 
             builder.Entity<RequestFollow>()
                 .HasKey(rf => new { rf.RequestId, rf.UserId });
+            
+            builder.Entity<ResourceCategory>()
+                .HasKey(rc => new { rc.ResourceId, rc.CategoryId });
+            
+            builder.Entity<RequestUpvote>()
+                .HasKey(ru => new { ru.RequestId, ru.UserId });
         }
     }
 }
