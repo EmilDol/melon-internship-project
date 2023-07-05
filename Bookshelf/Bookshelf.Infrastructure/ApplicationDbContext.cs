@@ -1,4 +1,5 @@
-﻿using Bookshelf.Infrastructure.Models;
+﻿using Bookshelf.Infrastructure.Configurations;
+using Bookshelf.Infrastructure.Models;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,8 @@ namespace Bookshelf.Infrastructure
             
             builder.Entity<RequestUpvote>()
                 .HasKey(ru => new { ru.RequestId, ru.UserId });
+
+            builder.ApplyConfiguration(new UserConfiguration());
         }
     }
 }

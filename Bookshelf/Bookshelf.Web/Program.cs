@@ -1,6 +1,7 @@
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;
 using Bookshelf.Web.Data;
+using Bookshelf.Web.Extensions;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -56,5 +58,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+app.SeedAdmin();
 
 app.Run();

@@ -78,8 +78,8 @@ namespace Bookshelf.Web.Controllers
 
             if (result.Succeeded)
             {
-                //await _userManager.AddToRoleAsync(user, "User");
-                return RedirectToAction(nameof(AccountController.Login), "Account");
+                await _userManager.AddToRoleAsync(user, "BaseUser");
+                return RedirectToAction(nameof(Login));
             }
 
             foreach (var item in result.Errors)
