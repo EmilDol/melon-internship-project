@@ -1,3 +1,5 @@
+using Bookshelf.Core.Services;
+using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;
 using Bookshelf.Web.Data;
@@ -31,6 +33,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
 });
+
+builder.Services.AddScoped<IRequestService, RequestService>();
 
 var app = builder.Build();
 
