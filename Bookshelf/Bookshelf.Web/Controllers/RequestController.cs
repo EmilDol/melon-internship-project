@@ -32,6 +32,7 @@ namespace Bookshelf.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approved()
         {
             var requests = await _requestService.GetAllApproved();
@@ -43,7 +44,8 @@ namespace Bookshelf.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Discarded()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Rejected()
         {
             var requests = await _requestService.GetAllDiscarded();
             RequestGetViewModel requestsModel = new RequestGetViewModel
@@ -66,6 +68,7 @@ namespace Bookshelf.Web.Controllers
             return View(request);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> StatusUpdate(int id)
         {
             var status = await _requestService.StatusUpdate(id);
@@ -73,17 +76,25 @@ namespace Bookshelf.Web.Controllers
             if (status == RequestStatus.Delivered)
             {
                 return RedirectToAction(nameof(ResourceController.AddRequestedResource),
-                    "Resource", new { requestId  = id});
+                    "Resource", new { requestId = id });
             }
 
             return RedirectToAction(nameof(Approved));
         }
 
 
-        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approve(int id)
         {
             await _requestService.Approve(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Reject(int id)
+        {
+            await _requestService.Reject(id);
 
             return RedirectToAction(nameof(Index));
         }
@@ -93,6 +104,7 @@ namespace Bookshelf.Web.Controllers
         {
             var modelForView = new RequestAddViewModel();
             modelForView.Request = new RequestAddDTO();
+            modelForView.Request.Categories = await _requestService.GetCategories();
 
             return View(modelForView);
         }
@@ -107,8 +119,15 @@ namespace Bookshelf.Web.Controllers
 
             if (await _requestService.Exists(model.Request.Title))
             {
-                //tempdata
+                //tempdata  
                 ModelState.AddModelError(nameof(model.Request.Title), "This resource already exists");
+
+                return View(model);
+            }
+
+            if (await _requestService.CheckMotivation(model.Request.Priority, model.Request.Motivation) == false)
+            {
+                ModelState.AddModelError(nameof(model.Request.Title), "Resource requires motivation because of its critical priority!");
 
                 return View(model);
             }
@@ -116,6 +135,12 @@ namespace Bookshelf.Web.Controllers
             await _requestService.Add(model.Request);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id, string status)
+        {
+            await _requestService.Edit(id, status);
+            return RedirectToAction(nameof(Details), new { id = id });
         }
     }
 }

@@ -24,6 +24,10 @@ namespace Bookshelf.Core.Services.Contracts
 
         Task Add(RequestAddDTO model);
 
-        Task<bool> CheckMotivation(Priority priority, string motivation);
+        Task Edit(int id, string status);
+
+        Task<bool> CheckMotivation(string priority, string motivation);
+
+        Task<List<CategoryDTO>> GetCategories();
     }
 }

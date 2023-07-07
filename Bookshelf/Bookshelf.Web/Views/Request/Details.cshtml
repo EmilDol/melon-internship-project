@@ -29,7 +29,7 @@
             </p>
 
             <p>
-                Link: @Model.Request.Link
+                Link:<link href="@Model.Request.Link" />
             </p>
 
             <p>
@@ -38,6 +38,13 @@
 
             <p>
                 Upvoted: @Model.Request.Upvoted
+            </p>
+
+            <p>
+                Categories: @foreach (var item in Model.Request.Categories)
+                {
+                    <text>@item, </text>
+                }
             </p>
 
             <p>
@@ -53,7 +60,19 @@
                 }
                 else
                 {
-                    <a asp-controller="Request" asp-action="StatusUpdate" asp-route-id="@Model.Request.Id" class="btn btn-success "> <i class="bi bi-person-dash-fill"></i>View</a>
+                    <form method="post" asp-controller="Request" asp-action="Edit" asp-route-id="@Model.Request.Id">
+                        <div style="padding-bottom: 20px">
+                            <label>Status</label>
+                            <select name="status" id="status" for="status" class="form-control">
+                                <option selected="@(Model.Request.Status == "AwaitingConfirmation")" name="Status" value="AwaitingConfirmation">AwaitingConfirmation</option>
+                                <option selected="@(Model.Request.Status == "InPreparation")" name="Status" value="InPreparation">InPreparation</option>
+                                <option selected="@(Model.Request.Status == "Delivering")" name="Status" value="Delivering">Delivering</option>
+                                <option selected="@(Model.Request.Status == "Delivered")" name="Status" value="Delivered">Delivered</option>
+                                <option selected="@(Model.Request.Status == "Discarded")" name="Status" value="Discarded">Discarded</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-person-dash-fill"></i>Update</button>
+                    </form>
                 }
             }
         </div>

@@ -4,6 +4,12 @@ namespace Bookshelf.Core.DTOs
 {
     public class RequestAddDTO
     {
+        public RequestAddDTO()
+        {
+            Categories = new();
+            CategoryIds = new();
+        }
+
         [Required]
         [MinLength(1)]
         [MaxLength(50)]
@@ -24,7 +30,8 @@ namespace Bookshelf.Core.DTOs
         [MaxLength(300)]
         public string? Motivation { get; set; } = null!;
 
-        [Required]
-        public List<string> Categories { get; set; } = null!;
+        public List<CategoryDTO> Categories { get; set; } = null!;
+
+        public List<int> CategoryIds { get; set; } = null!;
     }
 }

@@ -112,7 +112,7 @@ namespace Bookshelf.Core.Services
                         .Select(s => s.Category.Name)
                         .ToList()
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(r => r.Id == requestId);
 
             return requests;
         }
@@ -173,17 +173,53 @@ namespace Bookshelf.Core.Services
                 Motivation = model.Motivation
             };
 
-            _context.Requests.Add(request);
+            var categories = model.CategoryIds
+                .Select(c => new RequestCategory
+                {
+                    CategoryId = c,
+                    Request = request
+                })
+                .ToList();
+
+            request.Categories = categories;
+
+            await _context.Requests.AddAsync(request);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckMotivation(Priority priority, string motivation)
+        public async Task<bool> CheckMotivation(string priority, string motivation)
         {
-            if (priority == Priority.Critical && motivation == null)
+            if (priority == "Critical" && motivation == null)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public async Task<List<CategoryDTO>> GetCategories()
+        {
+            var categories = await _context.Categories
+                .Select(c => new CategoryDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+
+            return categories;
+        }
+
+        public async Task Edit(int id, string status)
+        {
+            var request = await _context.Requests.FindAsync(id);
+            if (request == null)
+            {
+                return;
+            }
+            var parsedStatus = (RequestStatus)Enum.Parse(typeof(RequestStatus), status);
+            request.Status = parsedStatus;
+           await _context.SaveChangesAsync();
         }
     }
 }

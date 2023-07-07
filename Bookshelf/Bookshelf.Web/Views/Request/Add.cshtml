@@ -1,0 +1,55 @@
+﻿@model RequestAddViewModel
+@{
+    ViewData["Title"] = "Add a Request";
+}
+
+<form id="AddRequestForm" method="post">
+
+    <div>
+        <div style="padding-bottom: 20px">
+            <label>Priority</label>
+            <select asp-for="@Model.Request.Priority" class="form-control">
+                <option name="Priority" value="Low">Low</option>
+                <option name="Priority" value="Medium">Medium</option>
+                <option name="Priority" value="High">High</option>
+                <option name="Priority" value="Critical">Critical</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Request.Title"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Request.Title" />
+            <span asp-validation-for="@Model.Request.Title" class="text-danger"></span>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Request.Author"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Request.Author" />
+            <span asp-validation-for="@Model.Request.Author" class="text-danger"></span>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Request.Motivation"></label>
+            <input type="text" class="multiline-input" aria-required="true" asp-for="@Model.Request.Motivation" />
+            <span asp-validation-for="@Model.Request.Motivation" class="text-danger"></span>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Request.Link"></label>
+            <input type="text" class="multiline-input" aria-required="true" asp-for="@Model.Request.Link" />
+            <span asp-validation-for="@Model.Request.Link" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div style="padding-bottom: 20px">
+        <label>Categories</label>
+        @foreach (var item in Model.Request.Categories)
+        {
+            <input type="checkbox" value="@item.Id" name="Request.CategoryIds" />
+            <label>@item.Name</label>
+        }
+    </div>
+    <button class="btn btn-danger" stype="width:130px" asp-action="Add" asp-controller="Request">Add</button>
+</form>
