@@ -2,8 +2,6 @@
 using Bookshelf.Core.Models;
 using Bookshelf.Infrastructure.Models.Enums;
 
-using Microsoft.AspNetCore.Mvc;
-
 namespace Bookshelf.Core.Services.Contracts
 {
     public interface IRequestService
@@ -21,5 +19,11 @@ namespace Bookshelf.Core.Services.Contracts
         Task Approve(int requestId);
 
         Task Reject(int requestId);
+
+        Task<bool> Exists(string requestName);
+
+        Task Add(RequestAddDTO model);
+
+        Task<bool> CheckMotivation(Priority priority, string motivation);
     }
 }

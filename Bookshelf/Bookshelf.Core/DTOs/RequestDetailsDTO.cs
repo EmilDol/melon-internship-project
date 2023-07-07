@@ -23,5 +23,7 @@
         public bool Followed { get; set; }
 
         public bool Upvoted { get; set; }
+
+        public List<string> Categories { get; set; } = null!;
     }
 }

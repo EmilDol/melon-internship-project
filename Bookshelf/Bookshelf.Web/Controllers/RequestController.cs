@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 
+using Bookshelf.Core.DTOs;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure.Models.Enums;
 using Bookshelf.Web.Models;
@@ -83,6 +84,36 @@ namespace Bookshelf.Web.Controllers
         public async Task<IActionResult> Approve(int id)
         {
             await _requestService.Approve(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var modelForView = new RequestAddViewModel();
+            modelForView.Request = new RequestAddDTO();
+
+            return View(modelForView);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(RequestAddViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (await _requestService.Exists(model.Request.Title))
+            {
+                //tempdata
+                ModelState.AddModelError(nameof(model.Request.Title), "This resource already exists");
+
+                return View(model);
+            }
+
+            await _requestService.Add(model.Request);
 
             return RedirectToAction(nameof(Index));
         }
