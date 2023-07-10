@@ -33,6 +33,7 @@ namespace Bookshelf.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["error"] = "Unsuccessful login!";
                 return View(model);
             }
 
@@ -41,11 +42,12 @@ namespace Bookshelf.Web.Controllers
             if (user == null)
             {
                 ModelState.AddModelError("", "Unsuccessful login");
+                TempData["error"] = "Unsuccessful login!";
                 return View(model);
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
-
+            TempData["success"] = "Successful login!";
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
@@ -63,6 +65,7 @@ namespace Bookshelf.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["error"] = "Unsuccessful register!";
                 return View(model);
             }
 
@@ -79,6 +82,7 @@ namespace Bookshelf.Web.Controllers
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "BaseUser");
+                TempData["success"] = "Successful login!";
                 return RedirectToAction(nameof(Login));
             }
 
@@ -93,7 +97,7 @@ namespace Bookshelf.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-
+            TempData["success"] = "You have been successfully loged out!";
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }

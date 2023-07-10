@@ -1,0 +1,23 @@
+﻿@model CategoryGetViewModel
+
+<div>
+    <a asp-controller="Category" asp-action="Add" class="btn btn-success "> <i class="bi bi-person-dash-fill"></i>Add</a>
+</div>
+@foreach (var item in Model.Categories)
+{
+    <div class="card" style=" padding: 25px 25px 25px 25px;">
+        <div class="container" style">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <h4>
+                        <b>
+                            <text>@item.Name</text>
+                        </b>
+                    </h4>
+                </div>
+            </div>
+
+            <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger "> <i class="bi bi-person-dash-fill"></i>Delete</a>
+        </div>
+    </div>
+}

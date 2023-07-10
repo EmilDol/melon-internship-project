@@ -75,10 +75,12 @@ namespace Bookshelf.Web.Controllers
 
             if (status == RequestStatus.Delivered)
             {
+                TempData["warning"] = "You are about to create a new resource!";
                 return RedirectToAction(nameof(ResourceController.AddRequestedResource),
                     "Resource", new { requestId = id });
             }
 
+            TempData["success"] = "Status has been successfully updated!";
             return RedirectToAction(nameof(Approved));
         }
 
@@ -88,6 +90,7 @@ namespace Bookshelf.Web.Controllers
         {
             await _requestService.Approve(id);
 
+            TempData["info"] = "You have successfully approved the request!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -96,6 +99,7 @@ namespace Bookshelf.Web.Controllers
         {
             await _requestService.Reject(id);
 
+            TempData["warning"] = "The request has been rejected!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -114,6 +118,7 @@ namespace Bookshelf.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["error"] = "Error!";
                 return View(model);
             }
 
@@ -122,6 +127,7 @@ namespace Bookshelf.Web.Controllers
                 //tempdata  
                 ModelState.AddModelError(nameof(model.Request.Title), "This resource already exists");
 
+                TempData["error"] = "This resource already exists!";
                 return View(model);
             }
 
@@ -129,17 +135,21 @@ namespace Bookshelf.Web.Controllers
             {
                 ModelState.AddModelError(nameof(model.Request.Title), "Resource requires motivation because of its critical priority!");
 
+                TempData["error"] = "Resource requires motivation because of its critical priority!";
                 return View(model);
             }
 
             await _requestService.Add(model.Request);
 
+            TempData["success"] = "The request has been successfully added!";
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id, string status)
         {
             await _requestService.Edit(id, status);
+
+            TempData["success"] = "The request has been successfully edited!";
             return RedirectToAction(nameof(Details), new { id = id });
         }
     }

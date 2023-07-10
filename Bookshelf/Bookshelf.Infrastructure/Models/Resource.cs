@@ -16,10 +16,12 @@ namespace Bookshelf.Infrastructure.Models
 
         [Required]
         [MaxLength(50)]
+        [MinLength(1)]
         public string Title { get; set; } = null!;
 
         [Required]
         [MaxLength(100)]
+        [MinLength(1)]
         public string Author { get; set; } = null!;
 
         public ICollection<ResourceCategory> Categories { get; set; } = null!;

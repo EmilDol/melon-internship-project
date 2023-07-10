@@ -1,0 +1,51 @@
+﻿@model ResourceGetViewModel
+
+@foreach (var item in Model.Resource)
+{
+    <div class="card" style=" padding: 25px 25px 25px 25px;">
+        <div class="container" style">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <h4>
+                        <b>
+                            <text>@item.Title</text>
+                        </b>
+                    </h4>
+                </div>
+            </div>
+
+
+            <p>
+                Author: @item.Author
+
+            </p>
+
+            <p>
+                Categories :@item.Categories
+
+            </p>
+
+            <p>
+                Status: @item.Status
+            </p>
+
+            <p>
+                Type: @item.Type
+            </p>
+
+            <p>
+                Date Taken: @item.DateTaken
+            </p>
+
+            <p>
+                Expected Return Date: @item.ExpectedReturnDate
+            </p>
+
+            <p>
+                FilePath: @item.FilePath
+            </p>
+
+            <a asp-controller="Resource" asp-action="Details" asp-route-id="@item.Id" class="btn btn-danger "> <i class="bi bi-person-dash-fill"></i>Details</a>
+        </div>
+    </div>
+}

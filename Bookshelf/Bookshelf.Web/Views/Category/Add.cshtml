@@ -1,0 +1,17 @@
+﻿@model CategoryAddViewModel
+@{
+    ViewData["Title"] = "Add a Request";
+}
+
+<form id="AddRequestForm" method="post">
+
+    <div>
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Category.Name"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Category.Name" />
+            <span asp-validation-for="@Model.Category.Name" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button class="btn btn-danger" stype="width:130px" asp-action="Add" asp-controller="Category">Add</button>
+</form>
