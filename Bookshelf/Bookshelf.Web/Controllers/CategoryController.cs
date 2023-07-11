@@ -1,6 +1,5 @@
 ﻿using Bookshelf.Core.Services.Contracts;
-using Bookshelf.Web.Models;
-
+using Bookshelf.Web.Models.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;

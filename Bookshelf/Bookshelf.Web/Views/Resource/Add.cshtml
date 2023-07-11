@@ -1,0 +1,58 @@
+﻿@using Bookshelf.Web.Models.Resources;
+@model ResourceAddViewModel
+@{
+    ViewData["Title"] = "Add a Request";
+}
+
+<form id="AddRequestForm" method="post">
+
+    <div>
+        <div style="padding-bottom: 20px">
+            <label>Type</label>
+            <select asp-for="@Model.Resource.Type" class="form-control">
+                <option name="Type" value="Physical">Physical</option>
+                <option name="Type" value="Digital">Digital</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Resource.Title"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Resource.Title" />
+            <span asp-validation-for="@Model.Resource.Title" class="text-danger"></span>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Resource.Author"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Resource.Author" />
+            <span asp-validation-for="@Model.Resource.Author" class="text-danger"></span>
+        </div>
+
+        <div>
+            <div style="padding-bottom: 20px">
+                <label>Status</label>
+                <select asp-for="@Model.Resource.Status" class="form-control">
+                    <option name="Status" value="Available">Available</option>
+                    <option name="Status" value="Taken">Taken</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Resource.FilePath"></label>
+            <input type="text" class="multiline-input" aria-required="true" asp-for="@Model.Resource.FilePath" />
+            <span asp-validation-for="@Model.Resource.FilePath" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div style="padding-bottom: 20px">
+        <label>Categories</label>
+        @foreach (var item in Model.Resource.Categories)
+        {
+            <input type="checkbox" value="@item.Id" name="Resource.CategoryIds" />
+            <label>@item.Name</label>
+        }
+    </div>
+    <button class="btn btn-danger" stype="width:130px" asp-action="Add" asp-controller="Resource">Add</button>
+</form>

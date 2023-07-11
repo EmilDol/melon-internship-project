@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Bookshelf.Infrastructure.Models;
-
-namespace Bookshelf.Core.DTOs
+namespace Bookshelf.Core.DTOs.Resources
 {
-    public class ResourceDTO
+    public class ResourceGetDTO
     {
         public int Id { get; set; }
 
@@ -18,16 +16,8 @@ namespace Bookshelf.Core.DTOs
         [MinLength(1)]
         public string Author { get; set; } = null!;
 
-        public ICollection<ResourceCategory> Categories { get; set; } = null!;
-
         public string? Type { get; set; }
 
-        public string DateTaken { get; set; }
-
-        public string ExpectedReturnDate { get; set; }
-
         public string? Status { get; set; }
-
-        public string? FilePath { get; set; }
     }
 }

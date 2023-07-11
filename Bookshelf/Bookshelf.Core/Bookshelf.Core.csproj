@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DTOs\Categories\ajrq5czm.oq4~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Bookshelf.Infrastructure\Bookshelf.Infrastructure.csproj" />
   </ItemGroup>
 

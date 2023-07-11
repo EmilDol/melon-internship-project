@@ -1,5 +1,5 @@
-﻿using Bookshelf.Core.DTOs;
-using Bookshelf.Core.Models;
+﻿using Bookshelf.Core.DTOs.Categories;
+using Bookshelf.Core.DTOs.Requests;
 using Bookshelf.Infrastructure.Models.Enums;
 
 namespace Bookshelf.Core.Services.Contracts

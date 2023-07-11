@@ -1,4 +1,4 @@
-﻿using Bookshelf.Core.DTOs;
+﻿using Bookshelf.Core.DTOs.Categories;
 
 namespace Bookshelf.Core.Services.Contracts
 {

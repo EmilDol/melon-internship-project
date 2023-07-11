@@ -1,6 +1,5 @@
 ﻿using Bookshelf.Infrastructure.Models;
-using Bookshelf.Web.Models;
-
+using Bookshelf.Web.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

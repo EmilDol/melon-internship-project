@@ -1,7 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-
+﻿using Bookshelf.Core.DTOs.Resources;
 using Bookshelf.Core.Services.Contracts;
-using Bookshelf.Web.Models;
+using Bookshelf.Web.Models.Resources;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,29 +11,47 @@ namespace Bookshelf.Web.Controllers
     public class ResourceController : Controller
     {
         private readonly IResourceService _resourceService;
+        private readonly ICategoryService _categoryService;
 
-        public ResourceController(IResourceService resourceService)
+        public ResourceController(IResourceService resourceService, ICategoryService categoryService)
         {
             _resourceService = resourceService;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index()
         {
+            ResourceGetViewModel model = new ResourceGetViewModel();
             var result = await _resourceService.GetAll();
-            return View(result);
+            model.Resource = result;
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            ResourceDetailsViewModel model = new ResourceDetailsViewModel();
+            var result = await _resourceService.GetDetails(id);
+            model.Resource = result;
+            return View(model);
         }
 
         [HttpGet]
-        public IActionResult Add()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Add()
         {
             ResourceAddViewModel model = new ResourceAddViewModel();
+            model.Resource = new ResourceAddDTO
+            {
+                Categories = await _categoryService.GetAll()
+            };
             return View(model);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(ResourceAddViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 TempData["error"] = "Error!";
                 return View(model);
@@ -57,14 +74,14 @@ namespace Bookshelf.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            ResourceGetViewModel model = new ResourceGetViewModel();
-            model.Resource = await _resourceService.GetById(id);
+            ResourceEditViewModel model = new ResourceEditViewModel();
+            model.Resource = await _resourceService.GetEdit(id);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ResourceGetViewModel model)
+        public async Task<IActionResult> Edit(ResourceEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -77,11 +94,10 @@ namespace Bookshelf.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> AddRequestedResource(int requestId)
-        //{
-            
-
-        //}
+        [HttpGet]
+        public async Task<IActionResult> AddRequestedResource(int requestId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

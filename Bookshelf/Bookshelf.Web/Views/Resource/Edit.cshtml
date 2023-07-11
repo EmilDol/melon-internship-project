@@ -1,0 +1,25 @@
+﻿@using Bookshelf.Web.Models.Resources;
+@model ResourceEditViewModel
+@{
+    ViewData["Title"] = "Edit a Resource";
+}
+
+<form id="AddRequestForm" method="post">
+
+    <div>
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Resource.Title"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Resource.Title" />
+            <span asp-validation-for="@Model.Resource.Title" class="text-danger"></span>
+        </div>
+
+        <div class="text-lg-start" style="padding-bottom: 20px;">
+            <label style="padding-left: 10px;" asp-for="@Model.Resource.Author"></label>
+            <input class="form-control" aria-required="true" asp-for="@Model.Resource.Author" />
+            <span asp-validation-for="@Model.Resource.Author" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="@Model.Resource.Id" value="@Model.Resource.Id" />
+    </div>
+
+    <button type="submit" class="btn btn-danger" stype="width:130px" asp-route-id="@Model.Resource.Id" asp-action="Edit" asp-controller="Resource">Save</button>
+</form>

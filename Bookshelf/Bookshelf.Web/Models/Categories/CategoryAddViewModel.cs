@@ -1,6 +1,6 @@
-﻿using Bookshelf.Core.DTOs;
+﻿using Bookshelf.Core.DTOs.Categories;
 
-namespace Bookshelf.Web.Models
+namespace Bookshelf.Web.Models.Categories
 {
     public class CategoryAddViewModel
     {

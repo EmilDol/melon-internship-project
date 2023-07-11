@@ -1,0 +1,49 @@
+﻿@using Bookshelf.Web.Models.Resources;
+@model ResourceDetailsViewModel
+
+<div>
+    <div class="card" style=" padding: 25px 25px 25px 25px;">
+        <div class="container">
+            <h4>
+                <b>
+                    Title: @Model.Resource.Title
+                </b>
+            </h4>
+            <p>
+                Author: @Model.Resource.Author
+            </p>
+
+            <p>
+                Type: @Model.Resource.Type
+            </p>
+
+            <p>
+                Date Taken: @Model.Resource.DateTaken
+            </p>
+
+            <p>
+                Expected Return Date: @Model.Resource.ExpectedReturnDate
+            </p>
+
+            <p>
+                Status: @Model.Resource.Status
+            </p>
+
+            <p>
+                File Path: @Model.Resource.FilePath
+            </p>
+
+            <p>
+                Categories: @foreach (var item in Model.Resource.Categories)
+                {
+                    <text>@item, </text>
+                }
+            </p>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Resource" asp-action="Edit" asp-route-id="@Model.Resource.Id" class="btn btn-success "> <i class="bi bi-person-dash-fill"></i>Edit</a>
+            }
+        </div>
+    </div>
+</div>

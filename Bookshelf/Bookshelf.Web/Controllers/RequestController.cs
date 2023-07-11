@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 
 using Bookshelf.Core.DTOs;
+using Bookshelf.Core.DTOs.Requests;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure.Models.Enums;
-using Bookshelf.Web.Models;
-
+using Bookshelf.Web.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Bookshelf.Core.DTOs.Categories;
 
-namespace Bookshelf.Core.DTOs
+namespace Bookshelf.Core.DTOs.Requests
 {
     public class RequestAddDTO
     {

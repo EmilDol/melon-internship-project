@@ -1,19 +1,24 @@
-﻿using Bookshelf.Core.DTOs;
+﻿using Bookshelf.Core.DTOs.Requests;
+using Bookshelf.Core.DTOs.Resources;
 
 namespace Bookshelf.Core.Services.Contracts
 {
     public interface IResourceService
     {
-        Task<List<ResourceDTO>> GetAll();
+        Task<List<ResourceGetDTO>> GetAll();
 
-        Task<ResourceDTO> GetById(int id); 
+        Task<ResourceDetailsDTO> GetDetails(int id);
 
-        Task Add(ResourceDTO resourceDTO);
+        //Task<ResourceDetailsDTO> GetById(int id); 
+
+        Task<ResourceEditDTO> GetEdit(int id);
+
+        Task Add(ResourceAddDTO resourceDTO);
 
         Task Delete(int id);
 
-        Task Edit(ResourceDTO resource);
+        Task Edit(ResourceEditDTO resource);
         
-        Task<ResourceDTO> RequestToResource(RequestAddDTO request);
+        Task<ResourceGetDTO> RequestToResource(RequestAddDTO request);
     }
 }

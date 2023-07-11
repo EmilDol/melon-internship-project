@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bookshelf.Web.Models
+namespace Bookshelf.Web.Models.Account
 {
     public class LoginViewModel
     {

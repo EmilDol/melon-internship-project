@@ -4,8 +4,6 @@ using Bookshelf.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-using System.Reflection.Emit;
-
 namespace Bookshelf.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext

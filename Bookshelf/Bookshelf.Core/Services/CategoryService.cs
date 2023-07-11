@@ -1,4 +1,4 @@
-﻿using Bookshelf.Core.DTOs;
+﻿using Bookshelf.Core.DTOs.Categories;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;

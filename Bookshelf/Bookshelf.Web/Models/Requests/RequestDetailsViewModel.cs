@@ -1,6 +1,6 @@
-﻿using Bookshelf.Core.DTOs;
+﻿using Bookshelf.Core.DTOs.Requests;
 
-namespace Bookshelf.Web.Models
+namespace Bookshelf.Web.Models.Requests
 {
     public class RequestDetailsViewModel
     {

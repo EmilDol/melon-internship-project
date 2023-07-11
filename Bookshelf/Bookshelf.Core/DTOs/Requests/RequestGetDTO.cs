@@ -1,4 +1,4 @@
-﻿namespace Bookshelf.Core.Models
+﻿namespace Bookshelf.Core.DTOs.Requests
 {
     public class RequestGetDTO
     {
