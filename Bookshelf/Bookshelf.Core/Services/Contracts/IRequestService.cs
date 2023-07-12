@@ -16,7 +16,9 @@ namespace Bookshelf.Core.Services.Contracts
 
         Task<RequestDetailsDTO> GetDetails(int requestId, string userId);
 
-        Task<RequestStatus> StatusUpdate(int requestId);
+        Task StatusUpdate(int requestId);
+
+        Task<RequestStatus> GetStatus(int requestId);
 
         Task Approve(int requestId);
 
@@ -33,5 +35,7 @@ namespace Bookshelf.Core.Services.Contracts
         Task Follow(string userId, int requestId);
 
         Task Upvote(string userId, int requestId);
+
+        Task<List<string>> GetFollowers(int id);
     }
 }

@@ -23,6 +23,7 @@ namespace Bookshelf.Core.Services
                 .Include(i => i.Categories)
                 .ThenInclude(ti => ti.Category)
                 .Where(r => r.Status == RequestStatus.AwaitingConfirmation)
+                .OrderByDescending(p => p.Priority)
                 .Select(u => new RequestGetDTO
                 {
                     Id = u.Id,
@@ -34,7 +35,6 @@ namespace Bookshelf.Core.Services
                         .Select(s => s.Category.Name)
                         .ToList()
                 })
-                .OrderByDescending(p => p.Priority)
                 .ToListAsync();
 
             return requests;
@@ -150,7 +150,7 @@ namespace Bookshelf.Core.Services
             }
 
             request.Status = RequestStatus.InPreparation;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task Reject(int requestId)
@@ -163,16 +163,14 @@ namespace Bookshelf.Core.Services
             }
 
             request.Status = RequestStatus.Discarded;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<RequestStatus> StatusUpdate(int requestId)
+        public async Task StatusUpdate(int requestId)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(r => r.Id == requestId);
             request.Status++;
             await _context.SaveChangesAsync();
-
-            return request.Status;
         }
 
         public async Task<bool> Exists(string requestName)
@@ -286,6 +284,27 @@ namespace Bookshelf.Core.Services
                 await _context.RequestsUpvotes.AddAsync(upvoteToAdd);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<string>> GetFollowers(int id)
+        {
+            var emails = await _context.RequestsFollows
+                .Include(r => r.User)
+                .Where(r => r.RequestId == id)
+                .Select(r => r.User.Email)
+                .ToListAsync();
+
+            return emails;
+        }
+
+        public async Task<RequestStatus> GetStatus(int requestId)
+        {
+            var status = await _context.Requests
+                .Where(r => r.Id == requestId)
+                .Select(r => r.Status)
+                .FirstOrDefaultAsync();
+
+            return status;
         }
     }
 }

@@ -5,6 +5,7 @@ using Bookshelf.Core.DTOs.Requests;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure.Models.Enums;
 using Bookshelf.Web.Models.Requests;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,15 @@ namespace Bookshelf.Web.Controllers
     {
         private readonly IRequestService _requestService;
         private readonly ICategoryService _categoryService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public RequestController(IRequestService requestService, ICategoryService categoryService)
+        public RequestController(IRequestService requestService, ICategoryService categoryService, IEmailService emailService, IConfiguration configuration)
         {
             _requestService = requestService;
             _categoryService = categoryService;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -73,14 +78,25 @@ namespace Bookshelf.Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> StatusUpdate(int id)
         {
-            var status = await _requestService.StatusUpdate(id);
+            var status = await _requestService.GetStatus(id);
 
-            if (status == RequestStatus.Delivered)
+            if (status == RequestStatus.Delivering)
             {
                 TempData["warning"] = "You are about to create a new resource!";
                 return RedirectToAction(nameof(ResourceController.AddRequestedResource),
                     "Resource", new { requestId = id });
             }
+
+            await _requestService.StatusUpdate(id);
+
+            string smtpServer = _configuration.GetSection("EmailSettings:SmtpServer").Value;
+            int port = int.Parse(_configuration.GetSection("EmailSettings:Port").Value);
+            string email = _configuration.GetSection("EmailSettings:Email").Value;
+            string password = _configuration.GetSection("EmailSettings:Password").Value;
+            string body = "The resource is now being delivered";
+            string subject = "Melon request";
+            var receivers = await _requestService.GetFollowers(id);
+            await _emailService.SendEmail(receivers, body, subject, smtpServer, email, password, port);
 
             TempData["success"] = "Status has been successfully updated!";
             return RedirectToAction(nameof(Approved));
@@ -92,6 +108,17 @@ namespace Bookshelf.Web.Controllers
         {
             await _requestService.Approve(id);
 
+            string smtpServer = _configuration.GetSection("EmailSettings:SmtpServer").Value;
+            int port = int.Parse(_configuration.GetSection("EmailSettings:Port").Value);
+            string email = _configuration.GetSection("EmailSettings:Email").Value;
+            string password = _configuration.GetSection("EmailSettings:Password").Value;
+
+            string body = "The resource has been approved and is now in preparation";
+            string subject = "Melon request";
+            var receivers = await _requestService.GetFollowers(id);
+            await _emailService.SendEmail(receivers, body, subject, smtpServer, email, password, port);
+
+
             TempData["info"] = "You have successfully approved the request!";
             return RedirectToAction(nameof(Index));
         }
@@ -100,6 +127,16 @@ namespace Bookshelf.Web.Controllers
         public async Task<IActionResult> Reject(int id)
         {
             await _requestService.Reject(id);
+
+            string smtpServer = _configuration.GetSection("EmailSettings:SmtpServer").Value;
+            int port = int.Parse(_configuration.GetSection("EmailSettings:Port").Value);
+            string email = _configuration.GetSection("EmailSettings:Email").Value;
+            string password = _configuration.GetSection("EmailSettings:Password").Value;
+
+            string body = "The resource has been rejected";
+            string subject = "Melon request";
+            var receivers = await _requestService.GetFollowers(id);
+            await _emailService.SendEmail(receivers, body, subject, smtpServer, email, password, port);
 
             TempData["warning"] = "The request has been rejected!";
             return RedirectToAction(nameof(Index));
@@ -150,6 +187,16 @@ namespace Bookshelf.Web.Controllers
         public async Task<IActionResult> Edit(int id, string status)
         {
             await _requestService.Edit(id, status);
+
+            string smtpServer = _configuration.GetSection("EmailSettings:SmtpServer").Value;
+            int port = int.Parse(_configuration.GetSection("EmailSettings:Port").Value);
+            string email = _configuration.GetSection("EmailSettings:Email").Value;
+            string password = _configuration.GetSection("EmailSettings:Password").Value;
+
+            string body = "Request's status has been updated";
+            string subject = "Melon request";
+            var receivers = await _requestService.GetFollowers(id);
+            await _emailService.SendEmail(receivers, body, subject, smtpServer, email, password, port);
 
             TempData["success"] = "The request has been successfully edited!";
             return RedirectToAction(nameof(Details), new { id = id });

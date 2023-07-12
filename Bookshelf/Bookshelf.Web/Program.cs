@@ -36,6 +36,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IResourceService, ResourceService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
