@@ -1,11 +1,13 @@
 ﻿using Bookshelf.Web.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
 
 namespace Bookshelf.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,11 +18,6 @@ namespace Bookshelf.Web.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

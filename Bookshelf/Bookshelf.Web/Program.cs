@@ -2,7 +2,6 @@ using Bookshelf.Core.Services;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;
-using Bookshelf.Web.Data;
 using Bookshelf.Web.Extensions;
 
 using Microsoft.AspNetCore.Identity;

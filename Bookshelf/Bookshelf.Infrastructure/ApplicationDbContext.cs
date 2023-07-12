@@ -25,7 +25,7 @@ namespace Bookshelf.Infrastructure
 
         public DbSet<ResourceCategory> ResourcesCategories { get; set; }
 
-        public DbSet<RequestUpvote> RequestUpvotes { get; set; }
+        public DbSet<RequestUpvote> RequestsUpvotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

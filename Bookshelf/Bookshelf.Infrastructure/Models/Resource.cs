@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using Bookshelf.Infrastructure.Models.Enums;
 
@@ -34,6 +35,11 @@ namespace Bookshelf.Infrastructure.Models
 
         public ResourceStatus? Status { get; set; }
 
-        public string? FilePath { get; set; } 
+        public string? FilePath { get; set; }
+
+        [ForeignKey(nameof(User))]
+        public string? UserId { get; set; }
+
+        public ApplicationUser? User { get; set; }
     }
 }

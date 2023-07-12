@@ -34,6 +34,7 @@ namespace Bookshelf.Core.Services
                         .Select(s => s.Category.Name)
                         .ToList()
                 })
+                .OrderByDescending(p => p.Priority)
                 .ToListAsync();
 
             return requests;
@@ -100,7 +101,9 @@ namespace Bookshelf.Core.Services
                     Priority = u.Priority.ToString(),
                     Status = u.Status.ToString(),
                     Title = u.Title,
-                    Upvotes = u.Upvotes,
+                    Upvotes = u.Upvoters
+                        .Where(u => u.RequestId == requestId)
+                        .Count(),
                     Upvoted = u.Upvoters
                         .Select(s => s.UserId)
                         .Contains(userId),
@@ -238,7 +241,30 @@ namespace Bookshelf.Core.Services
 
         public async Task Upvote(string userId, int requestId)
         {
+            var upvoted = await _context.RequestsUpvotes
+                .Where(r => r.RequestId == requestId)
+                .Select(c => c.UserId)
+                .ContainsAsync(userId);
 
+            if (upvoted == true)
+            {
+                var upvoteToRemove = await _context.RequestsUpvotes
+                    .Where(w => w.RequestId == requestId)
+                    .FirstOrDefaultAsync();
+
+                _context.RequestsUpvotes.Remove(upvoteToRemove);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var upvoteToAdd = new RequestUpvote
+                {
+                    RequestId = requestId,
+                    UserId = userId
+                };
+                await _context.RequestsUpvotes.AddAsync(upvoteToAdd);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

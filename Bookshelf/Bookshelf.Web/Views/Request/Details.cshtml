@@ -9,6 +9,26 @@
                     @Model.Request.Title
                 </b>
             </h4>
+            <div class="container">
+                    @if (!Model.Request.Upvoted)
+                    {
+                        <a asp-controller="Request" asp-action="Upvote" asp-route-id="@Model.Request.Id" class="btn" style="background-color: #a2b0a4"> <i class="bi bi-person-dash-fill"></i>Upvote @Model.Request.Upvotes</a>
+                    }
+                    else
+                    {
+                    <a asp-controller="Request" asp-action="Upvote" asp-route-id="@Model.Request.Id" class="btn" style="background-color: #7fcb53; color:white; border-color:white"> <i class="bi bi-person-dash-fill"></i>Upvoted @Model.Request.Upvotes</a>
+                    }
+
+                    @if (!Model.Request.Followed)
+                    {
+                    <a asp-controller="Request" asp-action="Follow" asp-route-id="@Model.Request.Id" class="btn" style="background-color:#9d65d6; color:white; border-color:white"> <i class="bi bi-person-dash-fill"></i>Follow</a>
+                    }
+                    else
+                    {
+                    <a asp-controller="Request" asp-action="Follow" asp-route-id="@Model.Request.Id" class="btn" style="background-color: #a2b0a4; border-color:white"> <i class="bi bi-person-dash-fill"></i>Unfollow</a>
+                    }
+            </div>
+
             <p>
                 Author: @Model.Request.Author
             </p>
@@ -26,19 +46,11 @@
             </p>
 
             <p>
-                Upvotes: @Model.Request.Upvotes
-            </p>
-
-            <p>
                 Link:<link href="@Model.Request.Link" />
             </p>
 
             <p>
                 Motivation: @Model.Request.Motivation
-            </p>
-
-            <p>
-                Upvoted: @Model.Request.Upvoted
             </p>
 
             <p>
@@ -71,14 +83,6 @@
                         <button type="submit" class="btn btn-success"><i class="bi bi-person-dash-fill"></i>Update</button>
                     </form>
                 }
-            }
-            @if (!Model.Request.Followed)
-            {
-                <a asp-controller="Request" asp-action="Follow" asp-route-id="@Model.Request.Id" class="btn btn-secondary" style="background-color: #8c00ff"> <i class="bi bi-person-dash-fill"></i>Follow</a>
-            }
-            else
-            {
-                <a asp-controller="Request" asp-action="Follow" asp-route-id="@Model.Request.Id" class="btn btn-warning" style="background-color:#ff9514"> <i class="bi bi-person-dash-fill"></i>Unfollow</a>
             }
         </div>
     </div>

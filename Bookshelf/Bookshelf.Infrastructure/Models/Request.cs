@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using Bookshelf.Infrastructure.Models.Enums;
 
@@ -33,9 +34,6 @@ namespace Bookshelf.Infrastructure.Models
         public Priority Priority { get; set; }
 
         [Required]
-        public int Upvotes { get; set; }
-
-        [Required]
         public string Link { get; set; } = null!;
 
         [MaxLength(300)]
@@ -46,5 +44,9 @@ namespace Bookshelf.Infrastructure.Models
         public ICollection<RequestFollow> Followers { get; set; } = null!;
 
         public ICollection<RequestUpvote> Upvoters { get; set; } = null!;
+
+        //[ForeignKey(nameof(User))]
+        //public string UserId { get; set; }
+        //public ApplicationUser User { get; set; }
     }
 }

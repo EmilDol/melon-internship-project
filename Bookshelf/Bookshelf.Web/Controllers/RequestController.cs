@@ -163,6 +163,12 @@ namespace Bookshelf.Web.Controllers
             return RedirectToAction(nameof(Details), new { id = id });
         }
 
+        public async Task<IActionResult> Upvote(int id)
+        {
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            await _requestService.Upvote(userId, id);
 
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
     }
 }

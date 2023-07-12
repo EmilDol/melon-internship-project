@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Bookshelf.Web.Data.Migrations
+namespace Bookshelf.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230705134421_SeededUser")]
-    partial class SeededUser
+    [Migration("20230712142356_Initial5.0")]
+    partial class Initial50
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,9 +77,6 @@ namespace Bookshelf.Web.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Upvotes")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Requests");
@@ -127,7 +124,7 @@ namespace Bookshelf.Web.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RequestUpvotes");
+                    b.ToTable("RequestsUpvotes");
                 });
 
             modelBuilder.Entity("Bookshelf.Infrastructure.Models.Resource", b =>
@@ -163,7 +160,12 @@ namespace Bookshelf.Web.Data.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Resources");
                 });
@@ -412,15 +414,15 @@ namespace Bookshelf.Web.Data.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f0bb4cad-3677-43f1-a02f-188f9aa2ac53",
+                            ConcurrencyStamp = "cda5f7d6-8d55-49c4-9fea-065af7aee8aa",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "SPIRIDON",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOaZP1ylDGILJ7ovmO8rhQLEAG9gtntG1fYx7Q/k2WDL7R/cEtQGQiqa8WQnQg6iwQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC8Rx79PvnsC5/DHV12AvIObBxZDQe51GdB0wKJpKOrUDHS02r12oPFAkRIRvs2pyA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c792ea86-c146-4e01-b5a9-e999245b98c8",
+                            SecurityStamp = "89d44388-f622-43fe-aaa3-9f7e4c84657a",
                             TwoFactorEnabled = false,
                             UserName = "Spiridon",
                             FirstName = "Spiridon",
@@ -430,15 +432,15 @@ namespace Bookshelf.Web.Data.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dd478bd2-e60a-45b2-8922-8cb0c52f2fa2",
+                            ConcurrencyStamp = "684904be-8e10-4456-9de3-293a0af9007c",
                             Email = "guest@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@GMAIL.COM",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOt4GWxf9xPg2MJRAhpoTf64QjT9dUNKVgVfBPWZCzmeN1F2ojWfqq8guU0qqPQCgQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJFkYjlT61zz8Ge/BJUYnZoKQxGKoaKo3mgtZy+hasFZIvVNMgEoy1HYVBSPhopGIA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f9a1e6e4-8f0b-499a-9dfc-6f97ab4eabec",
+                            SecurityStamp = "29f60d06-c31d-4d4d-a9cd-ae0fc049a26b",
                             TwoFactorEnabled = false,
                             UserName = "ivan",
                             FirstName = "Ivan",
@@ -474,7 +476,7 @@ namespace Bookshelf.Web.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Bookshelf.Infrastructure.Models.ApplicationUser", "User")
-                        .WithMany("Requests")
+                        .WithMany("Follows")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -499,6 +501,15 @@ namespace Bookshelf.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Request");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Bookshelf.Infrastructure.Models.Resource", b =>
+                {
+                    b.HasOne("Bookshelf.Infrastructure.Models.ApplicationUser", "User")
+                        .WithMany("Resources")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -596,7 +607,9 @@ namespace Bookshelf.Web.Data.Migrations
 
             modelBuilder.Entity("Bookshelf.Infrastructure.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Requests");
+                    b.Navigation("Follows");
+
+                    b.Navigation("Resources");
 
                     b.Navigation("Upvotes");
                 });

@@ -8,8 +8,10 @@ namespace Bookshelf.Infrastructure.Models
     {
         public ApplicationUser()
         {
-            Requests = new List<RequestFollow>();
+            Follows = new List<RequestFollow>();
             Upvotes = new List<RequestUpvote>();
+            //Requests = new List<Request>();
+            Resources = new List<Resource>();
         }
 
         [Required]
@@ -20,8 +22,12 @@ namespace Bookshelf.Infrastructure.Models
         [MaxLength(100)]
         public string LastName { get; set; } = null!;
 
-        public ICollection<RequestFollow> Requests { get; set; }
+        public ICollection<RequestFollow> Follows { get; set; }
 
         public ICollection<RequestUpvote> Upvotes { get; set; }
+
+        //public ICollection<Request> Requests { get; set; }
+
+        public ICollection<Resource> Resources { get; set; }
     }
 }
