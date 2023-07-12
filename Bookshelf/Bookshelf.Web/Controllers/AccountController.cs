@@ -46,6 +46,14 @@ namespace Bookshelf.Web.Controllers
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Unsuccessful login");
+                TempData["error"] = "Unsuccessful login!";
+                return View(model);
+            }
+
             TempData["success"] = "Successful login!";
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }

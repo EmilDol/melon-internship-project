@@ -27,8 +27,6 @@ namespace Bookshelf.Core.DTOs.Resources
 
         public string? Type { get; set; }
 
-        public string? Status { get; set; }
-
         public string? FilePath { get; set; }
     }
 }

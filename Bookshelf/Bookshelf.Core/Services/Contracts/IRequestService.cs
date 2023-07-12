@@ -28,6 +28,8 @@ namespace Bookshelf.Core.Services.Contracts
 
         Task<bool> CheckMotivation(string priority, string motivation);
 
-        Task<List<CategoryDTO>> GetCategories();
+        Task Follow(string userId, int requestId);
+
+        Task Upvote(string userId, int requestId);
     }
 }

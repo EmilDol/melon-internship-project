@@ -14,10 +14,12 @@ namespace Bookshelf.Web.Controllers
     public class RequestController : Controller
     {
         private readonly IRequestService _requestService;
+        private readonly ICategoryService _categoryService;
 
-        public RequestController(IRequestService requestService)
+        public RequestController(IRequestService requestService, ICategoryService categoryService)
         {
             _requestService = requestService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -108,7 +110,7 @@ namespace Bookshelf.Web.Controllers
         {
             var modelForView = new RequestAddViewModel();
             modelForView.Request = new RequestAddDTO();
-            modelForView.Request.Categories = await _requestService.GetCategories();
+            modelForView.Request.Categories = await _categoryService.GetAll();
 
             return View(modelForView);
         }
@@ -152,5 +154,15 @@ namespace Bookshelf.Web.Controllers
             TempData["success"] = "The request has been successfully edited!";
             return RedirectToAction(nameof(Details), new { id = id });
         }
+
+        public async Task<IActionResult> Follow(int id)
+        {
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            await _requestService.Follow(userId, id);
+
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+
+
     }
 }

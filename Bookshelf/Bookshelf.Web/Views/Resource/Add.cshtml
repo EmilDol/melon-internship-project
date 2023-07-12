@@ -29,16 +29,6 @@
             <span asp-validation-for="@Model.Resource.Author" class="text-danger"></span>
         </div>
 
-        <div>
-            <div style="padding-bottom: 20px">
-                <label>Status</label>
-                <select asp-for="@Model.Resource.Status" class="form-control">
-                    <option name="Status" value="Available">Available</option>
-                    <option name="Status" value="Taken">Taken</option>
-                </select>
-            </div>
-        </div>
-
         <div class="text-lg-start" style="padding-bottom: 20px;">
             <label style="padding-left: 10px;" asp-for="@Model.Resource.FilePath"></label>
             <input type="text" class="multiline-input" aria-required="true" asp-for="@Model.Resource.FilePath" />

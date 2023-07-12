@@ -36,13 +36,20 @@ namespace Bookshelf.Core.Services
         public async Task<ResourceDetailsDTO> GetDetails(int id)
         {
             var result = await _context.Resources
+                .Include(c => c.Categories)
+                .ThenInclude(r => r.Category)
                 .Where(r => r.Id == id)
                 .Select(r => new ResourceDetailsDTO
                 {
                     Id = r.Id,
                     Title = r.Title,
                     Author = r.Author,
-                    Categories = r.Categories.Select(c => new CategoryDTO()).ToList(),
+                    Categories = r.Categories
+                        .Select(c => new CategoryDTO
+                        {
+                            Name = c.Category.Name
+                        })
+                        .ToList(),
                     DateTaken = r.DateTaken.ToString(),
                     ExpectedReturnDate = r.ExpectedReturnDate.ToString(),
                     Type = r.Type.ToString(),
@@ -76,26 +83,19 @@ namespace Bookshelf.Core.Services
             {
                 Title = resourceDTO.Title,
                 Author = resourceDTO.Author,
-                //Add carteegorii
+                Categories = resourceDTO.CategoryIds
+                    .Select(c => new ResourceCategory
+                    {
+                        CategoryId = c
+                    })
+                    .ToList(),
                 Type = (ResourceType)Enum.Parse(typeof(ResourceType), resourceDTO.Type),
                 FilePath = resourceDTO.FilePath
             };
 
-            //if(resourceDTO.DateTaken != null )
-            //{
-            //    newResource.DateTaken = DateTime.Parse(resourceDTO.DateTaken);
-            //}
-            //if (resourceDTO.ExpectedReturnDate != null)
-            //{
-            //    newResource.ExpectedReturnDate = DateTime.Parse(resourceDTO.ExpectedReturnDate);
-            //}
-            //if (resourceDTO.DateTaken != null)
-            //{
-            //    newResource.DateTaken = DateTime.Parse(resourceDTO.DateTaken);
-            //}
-            if (resourceDTO.Status != null)
+            if (newResource.Type == ResourceType.Physical)
             {
-                newResource.Status = (ResourceStatus)Enum.Parse(typeof(ResourceStatus), resourceDTO.Status);
+                newResource.Status = ResourceStatus.Available;
             }
 
             await _context.Resources.AddAsync(newResource);

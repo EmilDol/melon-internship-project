@@ -17,32 +17,42 @@
                 Type: @Model.Resource.Type
             </p>
 
-            <p>
-                Date Taken: @Model.Resource.DateTaken
-            </p>
+            @if (Model.Resource.Type == "Physical")
+            {
+                if (Model.Resource.Status == "Taken")
+                {
+                    <p>
+                        Date Taken: @Model.Resource.DateTaken
+                    </p>
 
-            <p>
-                Expected Return Date: @Model.Resource.ExpectedReturnDate
-            </p>
+                    <p>
+                        Expected Return Date: @Model.Resource.ExpectedReturnDate
+                    </p>
+                }
 
-            <p>
-                Status: @Model.Resource.Status
-            </p>
+                <p>
+                    Status: @Model.Resource.Status
+                </p>
+            }
+            else
+            {
+                <p>
+                    File Path: @Model.Resource.FilePath
+                </p>
+            }
 
-            <p>
-                File Path: @Model.Resource.FilePath
-            </p>
 
             <p>
                 Categories: @foreach (var item in Model.Resource.Categories)
                 {
-                    <text>@item, </text>
+                    <text>@item.Name, </text>
                 }
             </p>
 
             @if (User.IsInRole("Admin"))
             {
                 <a asp-controller="Resource" asp-action="Edit" asp-route-id="@Model.Resource.Id" class="btn btn-success "> <i class="bi bi-person-dash-fill"></i>Edit</a>
+                <a asp-controller="Resource" asp-action="Delete" asp-route-id="@Model.Resource.Id" class="btn btn-danger "> <i class="bi bi-person-dash-fill"></i>Delete</a>
             }
         </div>
     </div>

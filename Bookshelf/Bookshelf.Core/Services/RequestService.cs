@@ -1,5 +1,4 @@
-﻿using Bookshelf.Core.DTOs.Categories;
-using Bookshelf.Core.DTOs.Requests;
+﻿using Bookshelf.Core.DTOs.Requests;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;
@@ -163,7 +162,7 @@ namespace Bookshelf.Core.Services
 
         public async Task Add(RequestAddDTO model)
         {
-            var request = new Request 
+            var request = new Request
             {
                 Title = model.Title,
                 Priority = (Priority)Enum.Parse(typeof(Priority), model.Priority),
@@ -197,19 +196,6 @@ namespace Bookshelf.Core.Services
             return true;
         }
 
-        public async Task<List<CategoryDTO>> GetCategories()
-        {
-            var categories = await _context.Categories
-                .Select(c => new CategoryDTO
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToListAsync();
-
-            return categories;
-        }
-
         public async Task Edit(int id, string status)
         {
             var request = await _context.Requests.FindAsync(id);
@@ -219,7 +205,40 @@ namespace Bookshelf.Core.Services
             }
             var parsedStatus = (RequestStatus)Enum.Parse(typeof(RequestStatus), status);
             request.Status = parsedStatus;
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Follow(string userId, int requestId)
+        {
+            var followed = await _context.RequestsFollows
+                .Where(r => r.RequestId == requestId)
+                .Select(c => c.UserId)
+                .ContainsAsync(userId);
+
+            if (followed == true)
+            {
+                var followToRemove = await _context.RequestsFollows
+                    .Where(w => w.RequestId == requestId)
+                    .FirstOrDefaultAsync();
+
+                _context.RequestsFollows.Remove(followToRemove);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var followToAdd = new RequestFollow
+                {
+                    RequestId = requestId,
+                    UserId = userId
+                };
+                await _context.RequestsFollows.AddAsync(followToAdd);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task Upvote(string userId, int requestId)
+        {
+
         }
     }
 }
