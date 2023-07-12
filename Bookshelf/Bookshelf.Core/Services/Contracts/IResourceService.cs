@@ -7,9 +7,9 @@ namespace Bookshelf.Core.Services.Contracts
     {
         Task<List<ResourceGetDTO>> GetAll();
 
-        Task<ResourceDetailsDTO> GetDetails(int id);
+        Task<List<ResourceGetDTO>> GetTakenById(string id);
 
-        //Task<ResourceDetailsDTO> GetById(int id); 
+        Task<ResourceDetailsDTO> GetDetails(int id);
 
         Task<ResourceEditDTO> GetEdit(int id);
 

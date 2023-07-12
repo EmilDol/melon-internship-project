@@ -26,11 +26,28 @@ namespace Bookshelf.Core.Services
                     Title = r.Title,
                     Author = r.Author,
                     Type = r.Type.ToString(),
-                    Status = r.Status.ToString(),
+                    Status = r.Status.ToString()
                 })
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task<List<ResourceGetDTO>> GetTakenById (string id)
+        {
+            var resources = await _context.Resources
+                .Where(u => u.UserId == id)
+                .Select(r => new ResourceGetDTO
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Author = r.Author,
+                    Type = r.Type.ToString(),
+                    Status = r.Status.ToString()
+                })
+                .ToListAsync();
+
+            return resources;
         }
 
         public async Task<ResourceDetailsDTO> GetDetails(int id)

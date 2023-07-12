@@ -84,6 +84,27 @@ namespace Bookshelf.Core.Services
             return requests;
         }
 
+        public async Task<List<RequestGetDTO>> GetFollowedById(string id)
+        {
+            var requests = await _context.RequestsFollows
+                .Include(r => r.Requests)
+                .Where(c => c.UserId == id)
+                .Select(u => new RequestGetDTO
+                {
+                    Id = u.Requests.Id,
+                    Author = u.Requests.Author,
+                    Priority = u.Requests.Priority.ToString(),
+                    Status = u.Requests.Status.ToString(),
+                    Title = u.Requests.Title,
+                    Categories = u.Requests.Categories
+                        .Select(s => s.Category.Name)
+                        .ToList()
+                })
+                .ToListAsync();
+            
+            return requests;
+        }
+
         public async Task<RequestDetailsDTO> GetDetails(int requestId, string userId)
         {
             var requests = await _context.Requests

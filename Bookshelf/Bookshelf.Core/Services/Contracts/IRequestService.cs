@@ -12,6 +12,8 @@ namespace Bookshelf.Core.Services.Contracts
 
         Task<List<RequestGetDTO>> GetAllDiscarded();
 
+        Task<List<RequestGetDTO>> GetFollowedById(string id);
+
         Task<RequestDetailsDTO> GetDetails(int requestId, string userId);
 
         Task<RequestStatus> StatusUpdate(int requestId);

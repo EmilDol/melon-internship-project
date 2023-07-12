@@ -1,15 +1,15 @@
-﻿@using Bookshelf.Web.Models.Requests;
-@model RequestGetViewModel
+﻿@using Bookshelf.Web.Models.Resources;
+@model ResourceGetViewModel
 
 @{
-    ViewData["Title"] = "Followed requests";
+    ViewData["Title"] = "Taken resources";
 }
+
 <div>
-    <a asp-controller="Home" asp-action="Taken" class="btn btn-danger "> <i class="bi bi-person-dash-fill"></i>Go to taken</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-danger "> <i class="bi bi-person-dash-fill"></i>Go to followed</a>
 </div>
 
-
-@foreach (var item in Model.Requests)
+@foreach (var item in Model.Resource)
 {
     <div class="card" style=" padding: 25px 25px 25px 25px;">
         <div class="container" style">
@@ -25,11 +25,6 @@
 
             <p>
                 Author: @item.Author
-
-            </p>
-
-            <p>
-                Priority :@item.Priority
 
             </p>
 
