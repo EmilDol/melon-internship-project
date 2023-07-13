@@ -81,15 +81,27 @@ namespace Bookshelf.Core.Services
         public async Task<ResourceEditDTO> GetEdit(int id)
         {
             var result = await _context.Resources
+                .Include (c => c.Categories)
+                .ThenInclude(c => c.Category)
                 .Where(r => r.Id == id)
                 .Select(r => new ResourceEditDTO
                 {
                     Id = r.Id,
                     Title = r.Title,
                     Author = r.Author,
-                    Categories = r.Categories.Select(c => new CategoryDTO()).ToList()
+                    CategoryIds = r.Categories
+                        .Select(c => c.CategoryId)
+                        .ToList()
                 })
                 .FirstOrDefaultAsync();
+
+            result.Categories = await _context.Categories
+                        .Select(r => new CategoryDTO
+                        {
+                            Id = r.Id,
+                            Name = r.Name
+                        })
+                        .ToListAsync();
 
             return result;
         }
@@ -133,7 +145,21 @@ namespace Bookshelf.Core.Services
 
             oldResource.Title = newResource.Title;
             oldResource.Author = newResource.Author;
-            //oldResource.Categories = newResource.Categories;
+
+            var categories = await _context.ResourcesCategories
+                .Where(r => r.ResourceId == oldResource.Id)
+                .ToListAsync();
+
+            _context.ResourcesCategories.RemoveRange(categories);
+
+            await _context.SaveChangesAsync();
+
+            oldResource.Categories = newResource.CategoryIds
+                .Select(r => new ResourceCategory
+                {
+                    CategoryId = r
+                })
+                .ToList();
 
             await _context.SaveChangesAsync();
         }
@@ -143,7 +169,7 @@ namespace Bookshelf.Core.Services
             //var request = await
             //ResourceAddDto model = new ResourceAddViewModel();
 
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

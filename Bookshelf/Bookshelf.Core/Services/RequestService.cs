@@ -1,4 +1,6 @@
-﻿using Bookshelf.Core.DTOs.Requests;
+﻿using Bookshelf.Core.DTOs.Categories;
+using Bookshelf.Core.DTOs.Requests;
+using Bookshelf.Core.DTOs.Resources;
 using Bookshelf.Core.Services.Contracts;
 using Bookshelf.Infrastructure;
 using Bookshelf.Infrastructure.Models;
@@ -305,6 +307,40 @@ namespace Bookshelf.Core.Services
                 .FirstOrDefaultAsync();
 
             return status;
+        }
+
+        public async Task<ResourceAddDTO> GetRequestForResource(int id)
+        {
+            var resource = await _context.Requests
+                .Include(r => r.Categories)
+                .Where(r => r.Id == id)
+                .Select(r => new ResourceAddDTO
+                {
+                    Author = r.Author,
+                    Title = r.Title,
+                    CategoryIds = r.Categories
+                        .Select(r => r.CategoryId)
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            resource.Categories = await _context.Categories
+                .Select(c => new CategoryDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+
+            return resource;
+        }
+
+        public async Task Delete(int id)
+        {
+            var req = await _context.Requests.FirstOrDefaultAsync(r => r.Id == id);
+            _context.Requests.Remove(req);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

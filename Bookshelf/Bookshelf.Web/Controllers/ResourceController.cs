@@ -11,12 +11,14 @@ namespace Bookshelf.Web.Controllers
     public class ResourceController : Controller
     {
         private readonly IResourceService _resourceService;
+        private readonly IRequestService _requestService;
         private readonly ICategoryService _categoryService;
 
-        public ResourceController(IResourceService resourceService, ICategoryService categoryService)
+        public ResourceController(IResourceService resourceService, ICategoryService categoryService, IRequestService requestService)
         {
             _resourceService = resourceService;
             _categoryService = categoryService;
+            _requestService = requestService;
         }
 
         public async Task<IActionResult> Index()
@@ -44,6 +46,7 @@ namespace Bookshelf.Web.Controllers
             {
                 Categories = await _categoryService.GetAll()
             };
+            model.ComesFromRequest = false;
             return View(model);
         }
 
@@ -54,7 +57,20 @@ namespace Bookshelf.Web.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["error"] = "Error!";
+                model.Resource.Categories = await _categoryService.GetAll();
                 return View(model);
+            }
+
+            if (model.Resource.Type == "Digital" && string.IsNullOrEmpty(model.Resource.FilePath))
+            {
+                ModelState.AddModelError(nameof(model.Resource.FilePath), "Requiered file when the type is digital");
+                model.Resource.Categories = await _categoryService.GetAll();
+                return View(model);
+            }
+
+            if (model.ComesFromRequest)
+            {
+                await _requestService.Delete(model.Id);
             }
 
             await _resourceService.Add(model.Resource);
@@ -86,6 +102,7 @@ namespace Bookshelf.Web.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["error"] = "Error!";
+                model.Resource.Categories = await _categoryService.GetAll();
                 return View(model);
             }
 
@@ -97,7 +114,12 @@ namespace Bookshelf.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AddRequestedResource(int requestId)
         {
-            throw new NotImplementedException();
+            var request = await _requestService.GetRequestForResource(requestId);
+            var model = new ResourceAddViewModel();
+            model.ComesFromRequest = true;
+            model.Id = requestId;
+            model.Resource = request;
+            return View(model);
         }
     }
 }

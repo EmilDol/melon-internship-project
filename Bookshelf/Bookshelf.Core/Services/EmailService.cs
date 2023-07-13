@@ -9,6 +9,11 @@ namespace Bookshelf.Core.Services
     {
         public async Task SendEmail(List<string> receivers, string body, string subject, string smtp, string email, string password, int port)
         {
+            if (receivers.Count <= 0)
+            {
+                return;
+            }
+
             using (var smtpClient = new SmtpClient(smtp, port))
             {
                 smtpClient.UseDefaultCredentials = false;

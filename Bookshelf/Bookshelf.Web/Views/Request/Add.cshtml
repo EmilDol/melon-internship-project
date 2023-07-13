@@ -48,7 +48,7 @@
         <label>Categories</label>
         @foreach (var item in Model.Request.Categories)
         {
-            <input type="checkbox" value="@item.Id" name="Request.CategoryIds" />
+            <input type="checkbox" checked="@(Model.Request.CategoryIds.Contains(item.Id))" value="@item.Id" name="Request.CategoryIds" />
             <label>@item.Name</label>
         }
     </div>

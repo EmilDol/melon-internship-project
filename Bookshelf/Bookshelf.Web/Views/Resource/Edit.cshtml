@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit a Resource";
 }
 
-<form id="AddRequestForm" method="post">
+<form id="EditResourceForm" method="post">
 
     <div>
         <div class="text-lg-start" style="padding-bottom: 20px;">
@@ -19,6 +19,15 @@
             <span asp-validation-for="@Model.Resource.Author" class="text-danger"></span>
         </div>
         <input type="hidden" asp-for="@Model.Resource.Id" value="@Model.Resource.Id" />
+    </div>
+
+    <div style="padding-bottom: 20px">
+        <label>Categories</label>
+        @foreach (var item in Model.Resource.Categories)
+        {
+            <input type="checkbox" checked="@Model.Resource.CategoryIds.Contains(item.Id)" value="@item.Id" name="Resource.CategoryIds" />
+            <label>@item.Name</label>
+        }
     </div>
 
     <button type="submit" class="btn btn-danger" stype="width:130px" asp-route-id="@Model.Resource.Id" asp-action="Edit" asp-controller="Resource">Save</button>

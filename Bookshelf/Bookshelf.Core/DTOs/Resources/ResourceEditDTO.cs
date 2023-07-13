@@ -23,5 +23,7 @@ namespace Bookshelf.Core.DTOs.Resources
         public string Author { get; set; } = null!;
 
         public ICollection<CategoryDTO> Categories { get; set; } = null!;
+
+        public ICollection<int> CategoryIds { get; set; }
     }
 }

@@ -158,6 +158,7 @@ namespace Bookshelf.Web.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["error"] = "Error!";
+                model.Request.Categories = await _categoryService.GetAll();
                 return View(model);
             }
 
@@ -188,6 +189,10 @@ namespace Bookshelf.Web.Controllers
         {
             await _requestService.Edit(id, status);
 
+            if (status == "Delivered")
+            {
+                return RedirectToAction(nameof(ResourceController.AddRequestedResource), "Resource", new { requestId = id });
+            }
             string smtpServer = _configuration.GetSection("EmailSettings:SmtpServer").Value;
             int port = int.Parse(_configuration.GetSection("EmailSettings:Port").Value);
             string email = _configuration.GetSection("EmailSettings:Email").Value;

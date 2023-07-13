@@ -1,11 +1,14 @@
 ﻿using Bookshelf.Core.DTOs.Categories;
 using Bookshelf.Core.DTOs.Requests;
+using Bookshelf.Core.DTOs.Resources;
 using Bookshelf.Infrastructure.Models.Enums;
 
 namespace Bookshelf.Core.Services.Contracts
 {
     public interface IRequestService
     {
+        Task Delete(int id);
+
         Task<List<RequestGetDTO>> GetAllUnapproved();
 
         Task<List<RequestGetDTO>> GetAllApproved();
@@ -37,5 +40,7 @@ namespace Bookshelf.Core.Services.Contracts
         Task Upvote(string userId, int requestId);
 
         Task<List<string>> GetFollowers(int id);
+
+        Task<ResourceAddDTO> GetRequestForResource(int id);
     }
 }
